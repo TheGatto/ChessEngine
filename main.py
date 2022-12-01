@@ -31,7 +31,9 @@ class Board:
             distancex = abs(xcoord-newxcoord)
             distancey = abs(ycoord-newycoord)
             if distancex == distancey:  # bishop
-                for i in range(xcoord, distancex):
+                # for i in range(xcoord, distancex):
+                #     ...
+                return True
             return False
 
 board = Board()
