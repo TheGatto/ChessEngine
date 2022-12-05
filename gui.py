@@ -1,6 +1,7 @@
 from os import environ
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
+
 white, black ,red = (255,255,255),(0,0,0),(255,0,0)
 pygame.init()
 dimensions = (800,800)
