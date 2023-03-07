@@ -21,10 +21,20 @@ class Board:
         return printable
     def checkMove(self, xcoord: int, ycoord: int, newxcoord: int, newycoord: int) -> bool:
         if newycoord == ycoord and newxcoord == xcoord:
-            return False
+            return False # If attempting to move on the same place
         piece = self.board[xcoord][ycoord]
         if piece == 4 or piece == 10:
-            if newycoord == ycoord or newxcoord == xcoord:
+            if newycoord == ycoord:
+                for col in range(min(xcoord, newxcoord) + 1, max(xcoord, newxcoord)):
+                    print("iterating through", ycoord, col)
+                    if board.board[ycoord][col] != 0:
+                        return False
+                return True
+            elif newxcoord == xcoord:
+                for col in range(min(xcoord, newycoord) + 1, max(xcoord, newycoord)):
+                    print("iterating through", xcoord, col)
+                    if board.board[xcoord][col] != 0:
+                        return False
                 return True
             return False
         if piece == 3 or piece == 9:
@@ -38,7 +48,8 @@ class Board:
 
 board = Board()
 board.board[0][0] = pieces.index('bR')
+board.board[3][0] = pieces.index('bR')
 print(board)
-if board.checkMove(0,0,4,0):
-    board.move(0,0,4,0)
+if board.checkMove(0,0,5,0):
+    board.move(0,0,5,0)
 print(board)
