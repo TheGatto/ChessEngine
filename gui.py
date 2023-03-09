@@ -67,6 +67,12 @@ class Board:
         BOARD[newx][newy] = piece
         Board.update()
 
+    @staticmethod
+    def castle(turn, long):
+        castleMoves = [[(((7, 4, 7, 6)), ((7, 7, 7, 5))), ((7, 4, 7, 2), (7, 0, 7, 3))], [((0, 4, 0, 6), (0, 7, 0, 5)), ((0, 4, 0, 2), (0, 0, 0, 3))]]
+        for i in range(2):
+            Board.move(*castleMoves[turn][long][i])
+        Board.update()
 
 size = 80
 boardLength = 8
@@ -83,19 +89,16 @@ while running:
             pygame.quit()
             running = False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_e:
+            if event.key == pygame.K_RIGHT:
                 try:
-                    if notationGame[count][0] == 'O':
-                        Board.move(*GAME[count])
-                        Board.move(*GAME[count + 1])
-                        Board.move(*GAME[count + 2])
-                        count += 3
+                    if len(GAME[count]) == 2:
+                        Board.castle(*GAME[count])
                     else:
                         Board.move(*GAME[count])
-                        count += 1
+                    count += 1
                 except:
                     print("You've reached the last move")
-            elif event.key == pygame.K_r:
+            elif event.key == pygame.K_LEFT:
                 if count > 0:
                     if count > 2 and notationGame[count - 3][0] == 'O':
                         Board.move(*(GAME[count - 1][2], GAME[count - 1][3], GAME[count - 1][0], GAME[count - 1][1]))
