@@ -3,9 +3,10 @@ from os import environ
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 import gameReader
+
 BOARD = [[0 for i in range(8)] for i in range(8)]
 beige, brown, black, white, dimensions, backgroundRGB = (235, 209, 166), (163, 116, 79), (0, 0, 0), (255, 255, 255), (
-800, 800), (230, 230, 230)
+    800, 800), (230, 230, 230)
 pygame.init()
 gameDisplay = pygame.display.set_mode(dimensions)
 gameDisplay.fill(backgroundRGB)
@@ -68,11 +69,19 @@ class Board:
         Board.update()
 
     @staticmethod
-    def castle(turn, long):
-        castleMoves = [[(((7, 4, 7, 6)), ((7, 7, 7, 5))), ((7, 4, 7, 2), (7, 0, 7, 3))], [((0, 4, 0, 6), (0, 7, 0, 5)), ((0, 4, 0, 2), (0, 0, 0, 3))]]
-        for i in range(2):
-            Board.move(*castleMoves[turn][long][i])
+    def castle(turn, long, reverse=False):
+        castleMoves = [[(((7, 4, 7, 6)), ((7, 7, 7, 5))), ((7, 4, 7, 2), (7, 0, 7, 3))],
+                       [((0, 4, 0, 6), (0, 7, 0, 5)), ((0, 4, 0, 2), (0, 0, 0, 3))]]
+        castleMovesReversed = [[(((7, 6, 7, 4)), ((7, 5, 7, 7))), ((7, 2, 7, 4), (7, 3, 7, 0))],
+                       [((0, 6, 0, 4), (0, 5, 0, 7)), ((0, 2, 0, 4), (0, 3, 0, 0))]]
+        if reverse:
+            for i in range(2):
+                Board.move(*castleMovesReversed[turn][long][i])
+        else:
+            for i in range(2):
+                Board.move(*castleMoves[turn][long][i])
         Board.update()
+
 
 size = 80
 boardLength = 8
@@ -80,7 +89,7 @@ boardLength = 8
 Board.draw(boardLength, size)
 Board.setup(size)
 pygame.display.flip()
-notationGame = "e2-e4/e7-e5/g1-f3/b8-c6/f1-c4/g8-f6/d2-d3/d7-d6/O-O/c8-g4/c1-g5/d8-d7/b1-c3/O-O-O"
+notationGame = "e2-e4/e7-e5/g1-f3/b8-c6/f1-c4/g8-f6/d2-d3/d7-d6/O-O/c8-g4/c1-g5/d8-d7/b1-c3/O-O-O/g5-f6/g7-f6"
 GAME, notationGame = gameReader.readCode(notationGame)
 count = 0
 while running:
@@ -100,11 +109,9 @@ while running:
                     print("You've reached the last move")
             elif event.key == pygame.K_LEFT:
                 if count > 0:
-                    if count > 2 and notationGame[count - 3][0] == 'O':
-                        Board.move(*(GAME[count - 1][2], GAME[count - 1][3], GAME[count - 1][0], GAME[count - 1][1]))
-                        Board.move(*(GAME[count - 2][2], GAME[count - 2][3], GAME[count - 2][0], GAME[count - 2][1]))
-                        Board.move(*(GAME[count - 3][2], GAME[count - 3][3], GAME[count - 3][0], GAME[count - 3][1]))
-                        count -= 3
+                    if len(GAME[count - 1]) == 2:
+                        count -= 1
+                        Board.castle(*GAME[count], reverse=True)
                     else:
                         count -= 1
                         Board.move(*(GAME[count][2], GAME[count][3], GAME[count][0], GAME[count][1]))
@@ -112,4 +119,4 @@ while running:
                     print("You've reached the first move")
             elif event.key == pygame.K_p:
                 print(GAME)
-                print(notationGame)
+                print(notationGame) 
