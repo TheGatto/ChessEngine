@@ -17,7 +17,7 @@ def readCode(code:str) -> tuple:
                     conv.append((0, 1))
                 else:  # Black's turn
                     conv.append((1, 1))
-    return conv, code
+    return conv
 if __name__ == '__main__':
     codeInput = input("Input code to be read: ")
     print(readCode(codeInput))

@@ -18,24 +18,25 @@ assetList = ['', 'chessAssets/wP.png', 'chessAssets/wN.png', 'chessAssets/wB.png
              'chessAssets/bB.png', 'chessAssets/bR.png', 'chessAssets/bQ.png', 'chessAssets/bK.png']
 
 
-def addPiece(x: int, y: int, type: int, size: int):
-    X = x * size
-    Y = y * size
-    BOARD[y - 1][x - 1] = type
-    imp = pygame.image.load(assetList[type]).convert_alpha()
-    imp = pygame.transform.scale(imp, (size, size))
-    gameDisplay.blit(imp, (X, Y))
-
 
 class Board:
+    @staticmethod
+    def addPiece(x: int, y: int, type: int, size: int):
+        X = x * size
+        Y = y * size
+        BOARD[y - 1][x - 1] = type
+        imp = pygame.image.load(assetList[type]).convert_alpha()
+        imp = pygame.transform.scale(imp, (size, size))
+        gameDisplay.blit(imp, (X, Y))
+
     @staticmethod
     def change(list):
         for num, row in enumerate(list):
             for num2, item in enumerate(row):
-                addPiece(num2 + 1, num + 1, item, size) if item != 0 else ...
+                Board.addPiece(num2 + 1, num + 1, item, size) if item != 0 else ...
 
     @staticmethod
-    def setup(size: int):
+    def setup():
 
         default = [[10, 8, 9, 11, 12, 9, 8, 10], [7, 7, 7, 7, 7, 7, 7, 7], [0, 0, 0, 0, 0, 0, 0, 0],
                    [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
@@ -87,10 +88,10 @@ size = 80
 boardLength = 8
 
 Board.draw(boardLength, size)
-Board.setup(size)
+Board.setup()
 pygame.display.flip()
 notationGame = "e2-e4/e7-e5/g1-f3/b8-c6/f1-c4/g8-f6/d2-d3/d7-d6/O-O/c8-g4/c1-g5/d8-d7/b1-c3/O-O-O/g5-f6/g7-f6"
-GAME, notationGame = gameReader.readCode(notationGame)
+GAME = gameReader.readCode(notationGame)
 count = 0
 while running:
     for event in pygame.event.get():
@@ -119,4 +120,5 @@ while running:
                     print("You've reached the first move")
             elif event.key == pygame.K_p:
                 print(GAME)
-                print(notationGame) 
+                print(notationGame)
+                print(BOARD)
