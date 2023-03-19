@@ -64,8 +64,14 @@ class Board:
         pygame.display.flip()
 
     @staticmethod
-    def move(x, y, newx, newy):
+    def move(x, y, newx, newy, capturedPiece=0):
         piece, BOARD[x][y] = BOARD[x][y], 0
+        BOARD[newx][newy] = piece
+        Board.update()
+
+    @staticmethod
+    def reverseCapture(x, y, newx, newy, capturedPiece):
+        piece, BOARD[x][y] = BOARD[x][y], capturedPiece
         BOARD[newx][newy] = piece
         Board.update()
 
@@ -85,7 +91,7 @@ boardLength = 8
 Board.draw(boardLength, size)
 Board.setup()
 pygame.display.flip()
-notationGame = "e2-e4/e7-e5/g1-f3/b8-c6/f1-c4/g8-f6/d2-d3/d7-d6/O-O/c8-g4/c1-g5/d8-d7/b1-c3/O-O-O/g5-f6/g7-f6"
+notationGame = "e2-e4/e7-e5/g1-f3/b8-c6/f1-c4/g8-f6/d2-d3/d7-d6/O-O/c8-g4/c1-g5/d8-d7/b1-c3/O-O-O/g5xf6/g7xf6"
 GAME = gameReader.readCode(notationGame)
 count = 0
 while running:
@@ -96,9 +102,14 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
                 try:
+                    # print('count', GAME[count])
+                    # print('captured piece', BOARD[GAME[count][0]][GAME[count][1]])
                     if len(GAME[count]) == 2:
                         Board.castle(*GAME[count])
                     else:
+                        if GAME[count][4] == 'x':
+                            GAME[count][4] = BOARD[GAME[count][2]][GAME[count][3]]
+                            # print('new count', GAME[count])
                         Board.move(*GAME[count])
                     count += 1
                 except:
@@ -109,8 +120,12 @@ while running:
                         count -= 1
                         Board.castle(*GAME[count], reverse=True)
                     else:
-                        count -= 1
-                        Board.move(*(GAME[count][2], GAME[count][3], GAME[count][0], GAME[count][1]))
+                        if GAME[count - 1][4] != 0:
+                            count -= 1
+                            Board.reverseCapture(*(GAME[count][2], GAME[count][3], GAME[count][0], GAME[count][1], GAME[count][4]))
+                        else:
+                            count -= 1
+                            Board.move(*(GAME[count][2], GAME[count][3], GAME[count][0], GAME[count][1]))
                 else:
                     print("You've reached the first move")
             elif event.key == pygame.K_p:
