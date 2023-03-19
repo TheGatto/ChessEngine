@@ -10,7 +10,7 @@ beige, brown, black, white, dimensions, backgroundRGB = (235, 209, 166), (163, 1
 pygame.init()
 gameDisplay = pygame.display.set_mode(dimensions)
 gameDisplay.fill(backgroundRGB)
-pygame.display.set_caption('Chess')
+pygame.display.set_caption('ChessEngine')
 running = True
 pieces = ['', 'wP', 'wN', 'wB', 'wR', 'wQ', 'wK', 'bP', 'bN', 'bB', 'bR', 'bQ', 'bK']
 assetList = ['', 'chessAssets/wP.png', 'chessAssets/wN.png', 'chessAssets/wB.png', 'chessAssets/wR.png',
