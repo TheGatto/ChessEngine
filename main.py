@@ -20,6 +20,11 @@ class Board:
             printable += '\n'  # Add new line
         return printable
     def checkMove(self, xcoord: int, ycoord: int, newxcoord: int, newycoord: int) -> bool:
+        if self.board[newxcoord][newycoord] != "X":
+            pieceColour = pieces[self.board[xcoord][ycoord]][0]
+            captureColour = pieces[self.board[newxcoord][newycoord]][0]
+            if pieceColour == captureColour:
+                return False
         if newycoord == ycoord and newxcoord == xcoord:
             return False # If attempting to move on the same place
         if newxcoord > 7 or newycoord > 7:
