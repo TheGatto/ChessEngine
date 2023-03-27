@@ -47,9 +47,11 @@ class Board:
             return False
 
 board = Board()
-board.board[0][0] = pieces.index('bB')
-board.board[3][3] = pieces.index('bB')
+board.board[0][0] = pieces.index('bR')
+board.board[0][4] = pieces.index('bR')
 print(board)
-if board.checkMove(0,0,4,4):
-    board.move(0,0,4,4)
+if board.checkMove(0,0,0,4):
+    board.move(0,0,0,4)
+else:
+    print("illegal move")
 print(board)
