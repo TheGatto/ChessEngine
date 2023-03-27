@@ -22,12 +22,14 @@ class Board:
     def checkMove(self, xcoord: int, ycoord: int, newxcoord: int, newycoord: int) -> bool:
         if newycoord == ycoord and newxcoord == xcoord:
             return False # If attempting to move on the same place
+        if newxcoord > 7 or newycoord > 7:
+            return False # Outside board range
         piece = self.board[xcoord][ycoord]
-        if piece == 4 or piece == 10:
+        if piece == 4 or piece == 10: # Rook
             if newycoord == ycoord:
                 for col in range(min(xcoord, newxcoord) + 1, max(xcoord, newxcoord)):
-                    print("iterating through", ycoord, col)
-                    if board.board[ycoord][col] != 0:
+                    print("iterating through", col, ycoord)
+                    if board.board[col][ycoord] != 0:
                         return False
                 return True
             elif newxcoord == xcoord:
@@ -37,19 +39,17 @@ class Board:
                         return False
                 return True
             return False
-        if piece == 3 or piece == 9:
+        if piece == 3 or piece == 9: # Bishop
             distancex = abs(xcoord-newxcoord)
             distancey = abs(ycoord-newycoord)
             if distancex == distancey:  # bishop
-                # for move in range(xcoord, distancex):
-                #     ...
                 return True
             return False
 
 board = Board()
-board.board[0][0] = pieces.index('bR')
-board.board[3][0] = pieces.index('bR')
+board.board[0][0] = pieces.index('bB')
+board.board[3][3] = pieces.index('bB')
 print(board)
-if board.checkMove(0,0,5,0):
-    board.move(0,0,5,0)
+if board.checkMove(0,0,4,4):
+    board.move(0,0,4,4)
 print(board)
