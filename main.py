@@ -53,10 +53,11 @@ class Board:
 
 board = Board()
 board.board[0][0] = pieces.index('bR')
-board.board[0][4] = pieces.index('bR')
+board.board[4][0] = pieces.index('wR')
 print(board)
-if board.checkMove(0,0,0,4):
-    board.move(0,0,0,4)
+if board.checkMove(0,0,4,0):
+    board.move(0,0,4,0)
 else:
     print("illegal move")
 print(board)
+print(board.board)

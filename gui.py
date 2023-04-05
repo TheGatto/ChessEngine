@@ -4,6 +4,8 @@ environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 import gameReader
 
+pygame.mixer.init()
+pygame.mixer.music.load("chessAssets/sounds/move.mp3")
 BOARD = [[0 for i in range(8)] for i in range(8)]
 beige, brown, black, white, dimensions, backgroundRGB = (235, 209, 166), (163, 116, 79), (0, 0, 0), (255, 255, 255), (
     800, 800), (230, 230, 230)
@@ -17,9 +19,14 @@ assetList = ['', 'chessAssets/wP.png', 'chessAssets/wN.png', 'chessAssets/wB.png
              'chessAssets/wQ.png', 'chessAssets/wK.png', 'chessAssets/bP.png', 'chessAssets/bN.png',
              'chessAssets/bB.png', 'chessAssets/bR.png', 'chessAssets/bQ.png', 'chessAssets/bK.png']
 
-
+def run(mode:str):
+    ...
 
 class Board:
+    @staticmethod
+    def clear():
+        global BOARD
+        BOARD = [[0 for i in range(8)] for i in range(8)]
     @staticmethod
     def addPiece(x: int, y: int, type: int, size: int):
         X = x * size
@@ -64,16 +71,24 @@ class Board:
         pygame.display.flip()
 
     @staticmethod
-    def move(x, y, newx, newy, capturedPiece=0):
+    def move(x, y, newx, newy, capturedPiece=0, silent=False):
+        if BOARD[newx][newy] != 0:
+            pygame.mixer.music.load("chessAssets/sounds/capture.mp3")
+        else:
+            pygame.mixer.music.load("chessAssets/sounds/move.mp3")
         piece, BOARD[x][y] = BOARD[x][y], 0
         BOARD[newx][newy] = piece
         Board.update()
+        if not silent:
+            pygame.mixer.music.play()
 
     @staticmethod
     def reverseCapture(x, y, newx, newy, capturedPiece):
+        pygame.mixer.music.load("chessAssets/sounds/capture.mp3")
         piece, BOARD[x][y] = BOARD[x][y], capturedPiece
         BOARD[newx][newy] = piece
         Board.update()
+        pygame.mixer.music.play()
 
     @staticmethod
     def castle(turn, long, reverse=False):
@@ -81,16 +96,17 @@ class Board:
                        [((0, 4, 0, 6), (0, 7, 0, 5)), ((0, 4, 0, 2), (0, 0, 0, 3))]], [[(((7, 6, 7, 4)), ((7, 5, 7, 7))), ((7, 2, 7, 4), (7, 3, 7, 0))],
                        [((0, 6, 0, 4), (0, 5, 0, 7)), ((0, 2, 0, 4), (0, 3, 0, 0))]]]
         for i in range(2):
-            Board.move(*castleMoves[reverse][turn][long][i])
+            Board.move(*castleMoves[reverse][turn][long][i], 0, True)
         Board.update()
+        pygame.mixer.music.load("chessAssets/sounds/castle.mp3")
+        pygame.mixer.music.play()
 
 
 size = 80
 boardLength = 8
-
 Board.draw(boardLength, size)
 Board.setup()
-pygame.display.flip()
+pygame.display.flip() #e2-e4/c7-c6/d2-d4/d7-d5/b1-c3
 notationGame = "e2-e4/e7-e5/g1-f3/b8-c6/f1-c4/g8-f6/d2-d3/d7-d6/O-O/c8-g4/c1-g5/d8-d7/b1-c3/O-O-O/g5xf6/g7xf6"
 GAME = gameReader.readCode(notationGame)
 count = 0
@@ -111,10 +127,12 @@ while running:
                             GAME[count][4] = BOARD[GAME[count][2]][GAME[count][3]]
                             # print('new count', GAME[count])
                         Board.move(*GAME[count])
+                        pygame.mixer.music.play()
                     count += 1
                 except:
                     print("You've reached the last move")
             elif event.key == pygame.K_LEFT:
+                pygame.mixer.music.play()
                 if count > 0:
                     if len(GAME[count - 1]) == 2:
                         count -= 1
@@ -132,3 +150,10 @@ while running:
                 print(GAME)
                 print(notationGame)
                 print(BOARD)
+            elif event.key == pygame.K_l:
+                code = input("Input game in MBC notation: ")
+                GAME = gameReader.readCode(code)
+                count = 0
+                Board.clear()
+                Board.setup()
+                Board.update()
