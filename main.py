@@ -47,16 +47,25 @@ class Board:
         if piece == 3 or piece == 9: # Bishop
             distancex = abs(xcoord-newxcoord)
             distancey = abs(ycoord-newycoord)
-            if distancex == distancey:  # bishop
+            if distancex == distancey:
+                return True
+            return False
+        if piece == 2 or piece == 8: # Knight
+            distancex = abs(xcoord - newxcoord)
+            distancey = abs(ycoord - newycoord)
+            if distancex == 3 or distancey == 3:
+                return False
+            if distancex + distancey == 3:
                 return True
             return False
 
 board = Board()
 board.board[0][0] = pieces.index('bR')
+board.board[1][2] = pieces.index('wN')
 board.board[4][0] = pieces.index('wR')
 print(board)
-if board.checkMove(0,0,4,0):
-    board.move(0,0,4,0)
+if board.checkMove(1,2,0,0):
+    board.move(1,2,0,0)
 else:
     print("illegal move")
 print(board)
