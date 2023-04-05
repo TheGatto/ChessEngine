@@ -78,9 +78,9 @@ class Board:
             pygame.mixer.music.load("chessAssets/sounds/move.mp3")
         piece, BOARD[x][y] = BOARD[x][y], 0
         BOARD[newx][newy] = piece
-        Board.update()
         if not silent:
             pygame.mixer.music.play()
+            Board.update()
 
     @staticmethod
     def reverseCapture(x, y, newx, newy, capturedPiece):
@@ -127,12 +127,10 @@ while running:
                             GAME[count][4] = BOARD[GAME[count][2]][GAME[count][3]]
                             # print('new count', GAME[count])
                         Board.move(*GAME[count])
-                        pygame.mixer.music.play()
                     count += 1
                 except:
                     print("You've reached the last move")
             elif event.key == pygame.K_LEFT:
-                pygame.mixer.music.play()
                 if count > 0:
                     if len(GAME[count - 1]) == 2:
                         count -= 1
