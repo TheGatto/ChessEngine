@@ -5,7 +5,6 @@ import pygame
 import gameReader
 
 pygame.mixer.init()
-pygame.mixer.music.load("chessAssets/sounds/move.mp3")
 BOARD = [[0 for i in range(8)] for i in range(8)]
 beige, brown, black, white, dimensions, backgroundRGB = (235, 209, 166), (163, 116, 79), (0, 0, 0), (255, 255, 255), (
     800, 800), (230, 230, 230)
